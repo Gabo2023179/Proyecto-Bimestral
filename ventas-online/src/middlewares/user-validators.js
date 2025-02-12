@@ -1,8 +1,8 @@
 import { body, param } from "express-validator";
-import { emailExists, usernameExists, userExists, userIsDeleted } from "../helpers/db-validators.js";
+import { emailExists, usernameExists, userExists, validateUserNotDeleted } from "../helpers/db-validators.js";
 import { validarCampos } from "./validate-fields.js";
 import { handleErrors } from "./handle-errors.js";
-import { hasRoles } from "./validate-roles.js";
+import { hasRoles, validateUpdateRole } from "./validate-roles.js";
 import { validateJWT } from "./validate-jwt.js";
 import { check } from "express-validator";
 
@@ -21,10 +21,12 @@ export const registerValidator = [
         minNumbers: 1,
         minSymbols: 1
     }),  
+    body("role").optional().isIn(["ADMIN", "CLIENT"]).withMessage("Rol no válido, debe ser 'ADMIN' o 'CLIENT'"), /* Aqui hacemos que role sea opcional para que por default un usuario sea CLIENT,
+     verificamos si los roles son ADMIN O CLIENT .isIN y tiramos mesaje.
+    */
     validarCampos,
     handleErrors
 ]
-
 export const loginValidator = [
     body("email").optional().isEmail().withMessage("No es un email válido"),
     body("username").optional().isString().withMessage("Username es en formáto erróneo"),
@@ -43,18 +45,27 @@ export const getUserByIdValidator = [
 ]
 
 export const deleteUserValidator = [
-    validateJWT,
-    hasRoles("ADMIN","CLIENT"),
-    check("usuario.uid").custom(userIsDeleted),
-    validarCampos,
-    handleErrors
-]
+    validateJWT, // Verifica que el usuario tenga un token válido
+    hasRoles("ADMIN", "CLIENT"), // Solo ADMIN o CLIENT pueden eliminar usuarios
+    check("usuario").custom(validateUserNotDeleted), // Usa el validador importado
+    validarCampos, // Revisa si hay errores en la validación antes de continuar
+    handleErrors // Maneja errores y los devuelve en formato JSON
+];
+
+export const adminUpdateUserValidator = [
+    validateJWT, // Verifica que el usuario tenga un token JWT válido.
+    hasRoles("ADMIN"), // Solo los administradores pueden actualizar usuarios.
+    param("uid", "No es un ID válido").isMongoId(), // Valida que `uid` en los parámetros sea un ID de MongoDB válido.
+    param("uid").custom(userExists), // Valida que el usuario con ese `uid` exista en la base de datos.
+    validarCampos, // Revisa si hay errores en las validaciones anteriores antes de continuar.
+    handleErrors // Maneja errores y los devuelve en formato JSON.
+];
+
 
 export const updateUserValidator = [
-    validateJWT,
-    hasRoles("ADMIN","CLIENT"),
-    param("uid", "No es un ID válido").isMongoId(),
-    param("uid").custom(userExists),
-    validarCampos,
-    handleErrors
-]
+    validateJWT, // Verifica que el usuario tenga un token JWT válido.
+    hasRoles("ADMIN", "CLIENT"), // Solo ADMIN y CLIENT pueden actualizar usuarios.
+    validateUpdateRole, // Valida que los cambios en el rol sean correctos.
+    validarCampos, // Revisa si hay errores en las validaciones antes de continuar.
+    handleErrors // Maneja errores y los devuelve en formato JSON.
+];

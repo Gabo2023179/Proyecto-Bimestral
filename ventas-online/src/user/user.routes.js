@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getUserById, getUsers, deleteUser, updateUser } from "./user.controller.js"
-import { getUserByIdValidator, deleteUserValidator, updateUserValidator } from "../middlewares/user-validators.js"
+import { getUserByIdValidator, deleteUserValidator, adminUpdateUserValidator, updateUserValidator } from "../middlewares/user-validators.js"
 
 const router = Router()
 
@@ -113,7 +113,9 @@ router.delete("/deleteUser", deleteUserValidator, deleteUser)
  *       400:
  *         description: Error en la solicitud
  */
-router.put("/updateUser/:uid", updateUserValidator, updateUser)
+router.put("/updateUser/:uid", adminUpdateUserValidator, updateUser)
+
+router.put("/updateUser", updateUserValidator, updateUser)
 
 /**
  * @swagger

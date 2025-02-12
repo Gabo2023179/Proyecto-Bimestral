@@ -54,43 +54,60 @@ export const getUsers = async (req, res) => {
     }
 }
 
-export const deleteUser = async (req, res) => {
-    try {
-        const { usuario } = req
-        
-        const user = await User.findByIdAndUpdate(usuario.uid, {status: false}, {new: true})
+export const deleteUser = async (req, res) => {  // Exporta la función deleteUser para su uso en rutas
+    try { 
+        const { usuario } = req; // Extrae el objeto `usuario` de `req` (viene del middleware validateJWT)
 
-        return res.status(200).json({
-            success: true,
-            message: "Usuario eliminado",
-            user: usuario.username
-        })
-    } catch (err) {
-        return res.status(500).json({
-            success: false,
-            message: "Error al eliminar el usuario",
-            error: err.message
-        })
+        // Validación: Verifica que el usuario esté definido y tenga un ID válido
+        if (!usuario || !usuario._id) {  // Si `usuario` no existe o su `_id` es inválido
+            return res.status(400).json({  // Devuelve un error con código 400 (Bad Request)
+                success: false,  // Indica que la operación falló
+                message: "ID de usuario no proporcionado", // Mensaje de error
+            });
+        }
+
+        // Se busca al usuario en la base de datos y se actualiza su estado a `false`
+        const user = await User.findByIdAndUpdate(usuario._id, { status: false }, { new: true });
+
+    
+        return res.status(200).json({  // código 200 (OK) indicando éxito
+            success: true,  
+            message: "Usuario eliminado",  
+            user: user.username  
+        });
+
+    } catch (err) {  
+        return res.status(500).json({  // código 500 (Internal Server Error)
+            success: false,  
+            message: "Error al eliminar el usuario", 
+            error: err.message  // Devuelve el mensaje del error específico para depuración
+        });
     }
-}
+};
 
-export const updateUser = async (req, res) => {
-    try {
-        const { uid } = req.params;
-        const  data  = req.body;
+export const updateUser = async (req, res) => {  
+    try {  
+        const { uid } = req.params; // Obtiene el ID del usuario (`uid`) desde los parámetros de la URL.
+        const data = req.body; // Obtiene los datos a actualizar desde el `body` de la petición.
 
-        const user = await User.findByIdAndUpdate(uid, data, { new: true });
+        // Busca el usuario en la base de datos y actualiza sus datos.
+        const user = await User.findByIdAndUpdate(uid, data, { new: true });  
+        // 🔹 `uid` → ID del usuario a actualizar.
+        // 🔹 `data` → Datos que se actualizarán.
+        // 🔹 `{ new: true }` → Devuelve el usuario actualizado en la respuesta.
+
 
         res.status(200).json({
-            success: true,
-            msg: 'Usuario Actualizado',
-            user,
+            success: true, 
+            msg: 'Usuario Actualizado', 
+            user, 
         });
-    } catch (err) {
+
+    } catch (err) {  
         res.status(500).json({
-            success: false,
-            msg: 'Error al actualizar usuario',
-            error: err.message
+            success: false, 
+            msg: 'Error al actualizar usuario', 
+            error: err.message 
         });
     }
-}
+};

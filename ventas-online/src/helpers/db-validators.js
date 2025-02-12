@@ -39,10 +39,14 @@ export const userExists = async (uid = " ") => {
     }
 }
 
-export const userIsDeleted = async (uid = " ") => {
-    const user = await User.findById(uid)
+export const validateUserNotDeleted = async (_, { req }) => {
+    const uid = req.usuario._id; // Obtiene el ID del usuario desde req.usuario
+    
+    const user = await User.findById(uid); // Busca el usuario en la base de datos
 
-    if(user.status === false){
-        throw new Error("El usuario ya fue eliminado")
+    if (!user) {
+        throw new Error("Usuario no encontrado"); // Si el usuario no existe, lanza un error
     }
-}
+    return true; // Si el usuario está activo, la validación pasa
+};
+
