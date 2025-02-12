@@ -1,9 +1,10 @@
 import { body, param } from "express-validator";
-import { emailExists, usernameExists, userExists } from "../helpers/db-validators.js";
+import { emailExists, usernameExists, userExists, userIsDeleted } from "../helpers/db-validators.js";
 import { validarCampos } from "./validate-fields.js";
 import { handleErrors } from "./handle-errors.js";
 import { hasRoles } from "./validate-roles.js";
 import { validateJWT } from "./validate-jwt.js";
+import { check } from "express-validator";
 
 
 export const registerValidator = [
@@ -44,8 +45,7 @@ export const getUserByIdValidator = [
 export const deleteUserValidator = [
     validateJWT,
     hasRoles("ADMIN","CLIENT"),
-    param("uid").isMongoId().withMessage("No es un ID válido de MongoDB"),
-    param("uid").custom(userExists),
+    check("usuario.uid").custom(userIsDeleted),
     validarCampos,
     handleErrors
 ]

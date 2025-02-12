@@ -54,7 +54,7 @@ router.get("/", getUsers)
  *       404:
  *         description: Usuario no encontrado
  */
-router.delete("/deleteUser/:uid", deleteUserValidator, deleteUser)
+router.delete("/deleteUser", deleteUserValidator, deleteUser)
 
 /**
  * @swagger

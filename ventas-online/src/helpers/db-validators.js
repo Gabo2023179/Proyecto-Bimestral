@@ -38,3 +38,11 @@ export const userExists = async (uid = " ") => {
         throw new Error("No existe el usuario con el ID proporcionado")
     }
 }
+
+export const userIsDeleted = async (uid = " ") => {
+    const user = await User.findById(uid)
+
+    if(user.status === false){
+        throw new Error("El usuario ya fue eliminado")
+    }
+}

@@ -56,14 +56,14 @@ export const getUsers = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
     try {
-        const { uid } = req.params
+        const { usuario } = req
         
-        const user = await User.findByIdAndUpdate(uid, {status: false}, {new: true})
+        const user = await User.findByIdAndUpdate(usuario.uid, {status: false}, {new: true})
 
         return res.status(200).json({
             success: true,
             message: "Usuario eliminado",
-            user
+            user: usuario.username
         })
     } catch (err) {
         return res.status(500).json({
