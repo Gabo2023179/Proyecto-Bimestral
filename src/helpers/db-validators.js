@@ -100,3 +100,29 @@ export const categoryNameExists = async (name = "") => {
   export const reassignProductsToDefault = async (categoryId, defaultCategoryId) => {
     return await Product.updateMany({ category: categoryId }, { category: defaultCategoryId });
   };
+
+
+  /**
+ * Verifica si el nombre del producto ya está registrado en la base de datos.
+ * @param {string} name - Nombre del producto a verificar.
+ * @throws {Error} Si el producto ya existe.
+ */
+export const productNameExists = async (name = "") => {
+    const exists = await Product.findOne({ name });
+    if (exists) {
+      throw new Error(`El producto ${name} ya existe`);
+    }
+  };
+  
+  /**
+   * Verifica si un producto con un ID específico existe en la base de datos.
+   * @param {string} id - ID del producto a verificar.
+   * @throws {Error} Si el producto no existe.
+   */
+  export const productExists = async (id = "") => {
+    const exists = await Product.findById(id);
+    if (!exists) {
+      throw new Error("No existe el producto con el ID proporcionado");
+    }
+    return true;
+  };
