@@ -1,14 +1,18 @@
 "use strict"
 
 import express from "express" // Framework para construir aplicaciones web y APIs en Node.js
-import cors from "cors" // Middleware para habilitar CORS (Cross-Origin Resource Sharing)
+import cors from "cors" // Middleware para habilitar CORS
 import helmet from "helmet" // Middleware para mejorar la seguridad HTTP
 import morgan from "morgan" // Middleware para registrar solicitudes HTTP en la consola
-import { dbConnection } from "./mongo.js" // Importa la función de conexión a la base de datos MongoDB
+import { dbConnection } from "./mongo.js" // Función de conexión a MongoDB
 import authRoutes from "../src/auth/auth.routes.js" // Rutas de autenticación
 import userRoutes from "../src/user/user.routes.js" // Rutas de gestión de usuarios
-import apiLimiter from "../src/middlewares/rate-limit-validator.js" // Middleware para limitar las solicitudes por usuario
-
+import categoryRoutes from "../src/category/category.routes.js" // Rutas de categorías
+import productRoutes from "../src/product/product.routes.js" // Rutas de productos
+import cartRoutes from "../src/cart/cart.routes.js" // Rutas de carrito de compras
+import invoiceRoutes from "../src/invoice/invoice.routes.js" // Rutas de facturas
+import checkoutRoutes from "../src/checkout/checkout.routes.js" // Rutas de checkout
+import apiLimiter from "../src/middlewares/rate-limit-validator.js" // Middleware para limitar solicitudes
 import { createDefaultAdmin } from "../src/middlewares/user-validators.js"
 
 
@@ -23,7 +27,12 @@ const middlewares = (app) => {
 
 const routes = (app) => {
     app.use("/ventasOnline/v1/auth", authRoutes) // Rutas de autenticación
-    app.use("/ventasOnline/v1/user", userRoutes) // Rutas de gestión de usuarios
+    app.use("/ventasOnline/v1/user", userRoutes) 
+    app.use("/ventasOnline/v1/product", productRoutes)
+    app.use("/ventasOnline/v1/category", categoryRoutes)
+    app.use("/ventasOnline/v1/cart", cartRoutes)
+    app.use("/ventasOnline/v1/invoice", invoiceRoutes)
+    app.use("/ventasOnline/v1/checkout", checkoutRoutes)
 }
 
 
