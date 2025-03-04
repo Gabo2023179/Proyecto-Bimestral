@@ -9,6 +9,9 @@ import authRoutes from "../src/auth/auth.routes.js" // Rutas de autenticación
 import userRoutes from "../src/user/user.routes.js" // Rutas de gestión de usuarios
 import apiLimiter from "../src/middlewares/rate-limit-validator.js" // Middleware para limitar las solicitudes por usuario
 
+import { createDefaultAdmin } from "../src/middlewares/user-validators.js"
+
+
 const middlewares = (app) => {
     app.use(express.urlencoded({extended: false})) // Permite el análisis de datos codificados en URL
     app.use(express.json()) // Permite el análisis de datos en formato JSON
@@ -36,11 +39,19 @@ const conectarDB = async () => {
 /**
  * Inicializa el servidor Express.
  */
+
+export const initServer = async ()  => {
+
 export const initServer = () => {
+
     const app = express() // Crea una instancia de Express
     try{
         middlewares(app) // Configura los middlewares
         conectarDB() // Conecta con la base de datos
+
+        await createDefaultAdmin()
+
+
         routes(app) // Configura las rutas de la API
         app.listen(process.env.PORT) // Inicia el servidor en el puerto definido en las variables de entorno
         console.log(`Server running on port ${process.env.PORT}`) // Muestra un mensaje en consola confirmando que el servidor está corriendo
