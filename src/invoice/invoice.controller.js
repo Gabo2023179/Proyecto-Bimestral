@@ -1,26 +1,23 @@
-import Invoice from "../models/invoice.model.js";
-import { generateInvoicePDF } from "../helpers/db-validators.js";
+import Invoice from "./invoice.model.js";
+import Product from "../product/product.model.js";
+import { generateInvoicePDF, validateInvoiceStock } from "../helpers/db-validators.js";
 
 /**
- * Obtiene todas las facturas. Si se pasa el query 'user', filtra por usuario.
+ * Obtiene todas las facturas, opcionalmente filtradas por usuario.
  */
 export const getInvoices = async (req, res) => {
   try {
     const query = {};
-
     if (req.query.user) {
       query.user = req.query.user;
     }
-
     const invoices = await Invoice.find(query)
       .populate("user", "name email")
       .populate("items.product", "name price");
-
-    return res.status(200).json({ 
-        success: true,
-        invoices 
-        });
-
+    return res.status(200).json({
+      success: true,
+      invoices
+    });
   } catch (err) {
     return res.status(500).json({
       success: false,
@@ -36,23 +33,19 @@ export const getInvoices = async (req, res) => {
 export const getInvoiceById = async (req, res) => {
   try {
     const { id } = req.params;
-
     const invoice = await Invoice.findById(id)
       .populate("user", "name email")
       .populate("items.product", "name price");
-
     if (!invoice) {
       return res.status(404).json({
-         success: false,
-         message: "Factura no encontrada"
-         });
+        success: false,
+        message: "Factura no encontrada"
+      });
     }
-
-    return res.status(200).json({ 
-        success: true,
-        invoice 
-        });
-
+    return res.status(200).json({
+      success: true,
+      invoice
+    });
   } catch (err) {
     return res.status(500).json({
       success: false,
@@ -68,17 +61,13 @@ export const getInvoiceById = async (req, res) => {
 export const createInvoice = async (req, res) => {
   try {
     const { user, items, total } = req.body;
-
     const invoice = new Invoice({ user, items, total });
-
     await invoice.save();
-
-    return res.status(201).json({ 
-        success: true,
-        message: "Factura creada exitosamente", 
-        invoice 
-        });
-
+    return res.status(201).json({
+      success: true,
+      message: "Factura creada exitosamente",
+      invoice
+    });
   } catch (err) {
     return res.status(500).json({
       success: false,
@@ -89,27 +78,63 @@ export const createInvoice = async (req, res) => {
 };
 
 /**
- * Actualiza una factura existente.
+ * Actualiza una factura existente.  
+ * Se revierte el stock de los items anteriores, se valida el stock para los nuevos items y se actualizan los productos.
  */
 export const updateInvoice = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const updatedInvoice = await Invoice.findByIdAndUpdate(id, req.body, { new: true });
-
-    if (!updatedInvoice) {
-      return res.status(404).json({ 
+    // Buscar la factura existente
+    const existingInvoice = await Invoice.findById(id);
+    if (!existingInvoice) {
+      return res.status(404).json({
         success: false,
-        message: "Factura no encontrada para actualizar"
-        });
+        message: "Factura no encontrada para actualizar",
+      });
     }
 
-    return res.status(200).json({ 
-        success: true,
-        message: "Factura actualizada exitosamente",
-        invoice: updatedInvoice 
-        });
+    // Si se actualizan los items, se debe ajustar el stock de los productos
+    if (req.body.items) {
+      // Revertir el stock de los items anteriores
+      for (const oldItem of existingInvoice.items) {
+        const product = await Product.findById(oldItem.product);
+        if (product) {
+          product.stock += oldItem.quantity;
+          product.sold = Math.max((product.sold || 0) - oldItem.quantity, 0);
+          await product.save();
+        }
+      }
 
+      // Validar stock para los nuevos items
+      await validateInvoiceStock(req.body.items);
+
+      let newTotal = 0;
+      // Actualizar stock y ventas para los nuevos items
+      for (const newItem of req.body.items) {
+        const product = await Product.findById(newItem.product);
+        newTotal += product.price * newItem.quantity;
+        product.stock -= newItem.quantity;
+        product.sold = (product.sold || 0) + newItem.quantity;
+        await product.save();
+      }
+      req.body.total = newTotal;
+    }
+
+    // Actualizar la factura
+    const updatedInvoice = await Invoice.findByIdAndUpdate(id, req.body, { new: true });
+    if (!updatedInvoice) {
+      return res.status(404).json({
+        success: false,
+        message: "Factura no encontrada para actualizar",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Factura actualizada exitosamente",
+      invoice: updatedInvoice,
+    });
   } catch (err) {
     return res.status(500).json({
       success: false,
@@ -120,30 +145,26 @@ export const updateInvoice = async (req, res) => {
 };
 
 /**
- * Genera el PDF de una factura y lo envía para descarga.
+ * Genera y descarga el PDF de una factura.
  */
 export const downloadInvoicePDF = async (req, res) => {
   try {
     const { id } = req.params;
-
     const invoice = await Invoice.findById(id)
       .populate("user", "name email")
       .populate("items.product", "name price");
-
     if (!invoice) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: "Factura no encontrada" 
-        });
+        message: "Factura no encontrada"
+      });
     }
-
     const pdfPath = await generateInvoicePDF(invoice);
-
     return res.download(pdfPath, `factura_${invoice._id}.pdf`, (err) => {
       if (err) {
         console.error("Error enviando el PDF", err);
       }
-      // Se puede eliminar el archivo temporal si se desea
+      // Opcional: eliminar el archivo temporal
     });
   } catch (err) {
     return res.status(500).json({
