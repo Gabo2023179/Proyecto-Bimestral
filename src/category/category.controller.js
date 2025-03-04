@@ -4,6 +4,7 @@ import { reassignProductsToDefault } from "../helpers/category.helpers.js";
 // ID de la categoría predeterminada a la cual se reasignan los productos
 const DEFAULT_CATEGORY_ID = "65f9c3f5d5e8b42f12345678";
 
+// Test
 
 export const getCategories = async (req, res) => {
   try {
