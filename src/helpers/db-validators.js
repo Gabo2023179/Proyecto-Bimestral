@@ -1,5 +1,10 @@
 import User from "../user/user.model.js"
 import Category from "../category/category.model.js"
+import Product from "../models/product.model.js";
+import PDFDocument from "pdfkit";
+import fs from "fs";
+import path from "path";
+
 
 export const emailExists = async (email = "") => {
     const existe = await User.findOne({email})
@@ -38,6 +43,13 @@ export const validateUserNotDeleted = async (_, { req }) => {
 };
 
 
+
+/**
+ * Verifica si el nombre de la categoría ya está registrado en la base de datos.
+ * @param {string} name - Nombre de la categoría a verificar.
+ * @throws {Error} Si la categoría ya existe.
+ */
+
 export const categoryNameExists = async (name = "") => {
     const exists = await Category.findOne({ name });
     if (exists) {
@@ -65,3 +77,88 @@ export const categoryNameExists = async (name = "") => {
   export const reassignProductsToDefault = async (categoryId, defaultCategoryId) => {
     return await Product.updateMany({ category: categoryId }, { category: defaultCategoryId });
   };
+
+
+  /**
+ * Verifica si el nombre del producto ya está registrado en la base de datos.
+ * @param {string} name - Nombre del producto a verificar.
+ * @throws {Error} Si el producto ya existe.
+ */
+export const productNameExists = async (name = "") => {
+    const exists = await Product.findOne({ name });
+    if (exists) {
+      throw new Error(`El producto ${name} ya existe`);
+    }
+  };
+  
+  /**
+   * Verifica si un producto con un ID específico existe en la base de datos.
+   * @param {string} id - ID del producto a verificar.
+   * @throws {Error} Si el producto no existe.
+   */
+  export const productExists = async (id = "") => {
+    const exists = await Product.findById(id);
+    if (!exists) {
+      throw new Error("No existe el producto con el ID proporcionado");
+    }
+    return true;
+  };
+
+  /**
+ * Valida el stock disponible para cada producto en la factura.
+ * @param {Array} items - Arreglo de items (cada uno con { product, quantity, price }).
+ * @throws {Error} Si algún producto no tiene stock suficiente.
+ */
+export const validateInvoiceStock = async (items) => {
+  for (const item of items) {
+    const product = await Product.findById(item.product);
+    if (!product) {
+      throw new Error(`Producto con ID ${item.product} no encontrado`);
+    }
+    if (product.stock < item.quantity) {
+      throw new Error(`Stock insuficiente para el producto ${product.name}`);
+    }
+  }
+  return true;
+};
+
+/**
+ * Genera un PDF de la factura usando PDFKit y lo guarda temporalmente.
+ * @param {Object} invoice - Objeto de la factura.
+ * @returns {Promise<string>} Ruta del archivo PDF generado.
+ */
+export const generateInvoicePDF = async (invoice) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const doc = new PDFDocument();
+      const filePath = path.join(process.cwd(), "temp", `invoice_${invoice._id}.pdf`);
+      fs.mkdirSync(path.dirname(filePath), { recursive: true });
+      const stream = fs.createWriteStream(filePath);
+      doc.pipe(stream);
+
+      // Encabezado
+      doc.fontSize(20).text("Factura", { align: "center" });
+      doc.moveDown();
+      doc.fontSize(12).text(`ID: ${invoice._id}`);
+      doc.text(`Usuario: ${invoice.user}`);
+      doc.text(`Fecha: ${invoice.createdAt}`);
+      doc.moveDown();
+
+      // Lista de productos
+      doc.text("Productos:");
+      invoice.items.forEach((item, index) => {
+        doc.text(`${index + 1}. Producto ID: ${item.product} | Cantidad: ${item.quantity} | Precio: ${item.price}`);
+      });
+      doc.moveDown();
+      doc.text(`Total: ${invoice.total}`);
+      doc.text(`Estado: ${invoice.status}`);
+      doc.end();
+
+      stream.on("finish", () => resolve(filePath));
+      stream.on("error", reject);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
