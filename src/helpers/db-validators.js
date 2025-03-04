@@ -54,6 +54,7 @@ export const validateUserNotDeleted = async (_, { req }) => {
     return true; // Si el usuario está activo, la validación pasa
 };
 
+
 /**
  * Verifica si el nombre de la categoría ya está registrado en la base de datos.
  * @param {string} name - Nombre de la categoría a verificar.
@@ -187,3 +188,4 @@ export const generateInvoicePDF = async (invoice) => {
     }
   });
 };
+

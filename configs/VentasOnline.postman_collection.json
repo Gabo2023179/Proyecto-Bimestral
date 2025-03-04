@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "94af023f-d924-4767-8921-d0cd59361f35",
+		"name": "VentasOnline",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "37589039"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "listar usuarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://127.0.0.1:3000/ventasOnline/user"
+					},
+					"response": []
+				},
+				{
+					"name": "actualizar usuarios",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": "http://127.0.0.1:3000/ventasOnline/user/findUser/"
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar usuario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://127.0.0.1:3000/ventasOnline/user/deleteUser"
+					},
+					"response": []
+				},
+				{
+					"name": "actualizar usuario ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://127.0.0.1:3000/ventasOnline/user/findUser/"
+					},
+					"response": []
+				},
+				{
+					"name": "actualizar usuarios ID",
+					"request": {
+						"method": "PUT",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "registrar usuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Juan\",\r\n    \"surname\": \"Pérez\",\r\n    \"username\": \"juanperez123\",\r\n    \"email\": \"juan.perez@example.com\",\r\n    \"password\": \"SecurePass123!\",\r\n    \"phone\": \"12345678\",\r\n    \"role\": \"CLIENT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://127.0.0.1:3000/ventasOnline/auth/register"
+					},
+					"response": []
+				},
+				{
+					"name": "logear usuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "http://127.0.0.1:3000/ventasOnline/auth/login"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
