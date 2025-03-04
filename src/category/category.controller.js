@@ -4,13 +4,7 @@ import { reassignProductsToDefault } from "../helpers/category.helpers.js";
 // ID de la categoría predeterminada a la cual se reasignan los productos
 const DEFAULT_CATEGORY_ID = "65f9c3f5d5e8b42f12345678";
 
-/**
- * Obtiene todas las categorías existentes.
- *
- * @param {object} req - Objeto de solicitud Express.
- * @param {object} res - Objeto de respuesta Express.
- * @returns {Promise<object>} JSON con la lista de categorías.
- */
+
 export const getCategories = async (req, res) => {
   try {
     const categories = await Category.find();
@@ -27,15 +21,7 @@ export const getCategories = async (req, res) => {
   }
 };
 
-/**
- * Obtiene una categoría específica por su ID.
- *
- * @param {object} req - Objeto de solicitud Express.
- * @param {object} req.params - Parámetros de la URL.
- * @param {string} req.params.id - ID de la categoría.
- * @param {object} res - Objeto de respuesta Express.
- * @returns {Promise<object>} JSON con la categoría encontrada o un error.
- */
+
 export const getCategoryById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -59,14 +45,7 @@ export const getCategoryById = async (req, res) => {
   }
 };
 
-/**
- * Crea una nueva categoría.
- *
- * @param {object} req - Objeto de solicitud Express.
- * @param {object} req.body - Datos para crear la categoría.
- * @param {object} res - Objeto de respuesta Express.
- * @returns {Promise<object>} JSON con la categoría creada.
- */
+
 export const createCategory = async (req, res) => {
   try {
     const { name, description, createdBy } = req.body;
@@ -86,16 +65,7 @@ export const createCategory = async (req, res) => {
   }
 };
 
-/**
- * Actualiza la información de una categoría existente.
- *
- * @param {object} req - Objeto de solicitud Express.
- * @param {object} req.params - Parámetros de la URL.
- * @param {string} req.params.id - ID de la categoría a actualizar.
- * @param {object} req.body - Datos a actualizar.
- * @param {object} res - Objeto de respuesta Express.
- * @returns {Promise<object>} JSON con la categoría actualizada.
- */
+
 export const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
@@ -120,15 +90,6 @@ export const updateCategory = async (req, res) => {
   }
 };
 
-/**
- * Elimina una categoría y reasigna automáticamente los productos asociados a la categoría predeterminada.
- *
- * @param {object} req - Objeto de solicitud Express.
- * @param {object} req.params - Parámetros de la URL.
- * @param {string} req.params.id - ID de la categoría a eliminar.
- * @param {object} res - Objeto de respuesta Express.
- * @returns {Promise<object>} JSON confirmando la eliminación y reasignación.
- */
 export const deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;

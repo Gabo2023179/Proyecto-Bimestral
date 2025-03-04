@@ -6,7 +6,7 @@ const CategorySchema = new Schema(
       type: String,
       required: [true, "El nombre de la categoría es obligatorio"],
       trim: true,
-      unique: true, // Evita nombres duplicados
+      unique: true,
     },
     description: {
       type: String,
@@ -15,15 +15,15 @@ const CategorySchema = new Schema(
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true, // Solo usuarios autorizados pueden crear categorías
+      required: true, 
     },
     status: {
       type: Boolean,
-      default: true, // Indica si la categoría está activa
+      default: true, 
     },
   },
   {
-    timestamps: true, // Añade automáticamente "createdAt" y "updatedAt"
+    timestamps: true,
     versionKey: false,
   }
 );
