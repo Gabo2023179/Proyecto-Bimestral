@@ -2,10 +2,11 @@ import { body, param } from "express-validator";
 import { emailExists, usernameExists, userExists, validateUserNotDeleted } from "../helpers/db-validators.js";
 import { validarCampos } from "./validate-fields.js";
 import { handleErrors } from "./handle-errors.js";
-import { hasRoles, validateUpdateRole } from "./validate-roles.js";
+import { hasRoles, validateUpdateRole, adminCantEditOtherAdmin, validateDeleteRole, adminCantDeleteOtherAdmin} from "./validate-roles.js";
 import { validateJWT } from "./validate-jwt.js";
 import { check } from "express-validator";
 import { hash } from "argon2"; 
+import User from "../user/user.model.js";
 import { generateJWT } from "../helpers/generate-jwt.js"; // Asegúrate de tener bcryptjs instalado
 
 
@@ -48,7 +49,9 @@ export const getUserByIdValidator = [
 
 export const deleteUserValidator = [
     validateJWT, // Verifica que el usuario tenga un token válido
-    hasRoles("ADMIN", "CLIENT"), // Solo ADMIN o CLIENT pueden eliminar usuarios
+    hasRoles("ADMIN", "CLIENT"),
+    adminCantDeleteOtherAdmin,
+    validateDeleteRole, // Solo ADMIN o CLIENT pueden eliminar usuarios
     check("usuario").custom(validateUserNotDeleted), // Usa el validador importado
     validarCampos, // Revisa si hay errores en la validación antes de continuar
     handleErrors // Maneja errores y los devuelve en formato JSON
@@ -56,21 +59,15 @@ export const deleteUserValidator = [
 
 export const adminUpdateUserValidator = [
     validateJWT, // Verifica que el usuario tenga un token JWT válido.
-    hasRoles("ADMIN"), // Solo los administradores pueden actualizar usuarios.
+    hasRoles("ADMIN", "CLIENT"),
+    validateUpdateRole, 
+    adminCantEditOtherAdmin,
     param("uid", "No es un ID válido").isMongoId(), // Valida que `uid` en los parámetros sea un ID de MongoDB válido.
     param("uid").custom(userExists), // Valida que el usuario con ese `uid` exista en la base de datos.
     validarCampos, // Revisa si hay errores en las validaciones anteriores antes de continuar.
     handleErrors // Maneja errores y los devuelve en formato JSON.
 ];
 
-
-export const updateUserValidator = [
-    validateJWT, // Verifica que el usuario tenga un token JWT válido.
-    hasRoles("ADMIN", "CLIENT"), // Solo ADMIN y CLIENT pueden actualizar usuarios.
-    validateUpdateRole, // Valida que los cambios en el rol sean correctos.
-    validarCampos, // Revisa si hay errores en las validaciones antes de continuar.
-    handleErrors // Maneja errores y los devuelve en formato JSON.
-];
 
 export const createDefaultAdmin = async (req, res) => {
     // Si res no está definido, asignar un objeto dummy que permita evitar el error

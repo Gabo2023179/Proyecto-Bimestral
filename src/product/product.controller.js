@@ -1,5 +1,9 @@
-import Product from "../models/product.model.js";
+import Product from "../product/product.model.js";
+import fs from "fs/promises"
+import { join, dirname } from "path"
+import { fileURLToPath } from "url"
 
+const __dirname = dirname(fileURLToPath(import.meta.url))
 /**
  * Obtiene el catálogo completo de productos.
  * Si se reciben query params, se realizan búsquedas o filtrados:
@@ -196,6 +200,57 @@ export const getBestSellingProducts = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error al obtener los productos más vendidos",
+      error: err.message,
+    });
+  }
+};
+
+export const updateProductImage = async (req, res) => {
+  try {
+    const { id } = req.params; // Se espera que el parámetro se llame 'pid'
+    const newProductImage = req.file ? req.file.filename : null;
+
+    if (!newProductImage) {
+      return res.status(400).json({
+        success: false,
+        msg: 'No se proporcionó una nueva imagen para el producto',
+      });
+    }
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        msg: 'Producto no encontrado',
+      });
+    }
+
+    // Si ya existe al menos una imagen para el producto, eliminar la principal (primer elemento)
+    if (product.images && product.images.length > 0) {
+      const oldProductImage = product.images[0];
+      const oldProductImagePath = join(__dirname, "../../public/uploads/product-images", oldProductImage);
+      try {
+        await fs.unlink(oldProductImagePath);
+      } catch (unlinkErr) {
+        console.log(`Error al eliminar la imagen antigua: ${unlinkErr}`);
+      }
+      // Remover la imagen antigua del arreglo
+      product.images.shift();
+    }
+
+    // Se añade la nueva imagen al inicio del arreglo (como imagen principal)
+    product.images.unshift(newProductImage);
+    await product.save();
+
+    return res.status(200).json({
+      success: true,
+      msg: 'Imagen del producto actualizada',
+      product,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      msg: 'Error al actualizar la imagen del producto',
       error: err.message,
     });
   }

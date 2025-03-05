@@ -1,0 +1,607 @@
+{
+	"info": {
+		"_postman_id": "a1458c24-ecd8-4426-849b-14210c033ef0",
+		"name": "VentaOnline",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "37589039"
+	},
+	"item": [
+		{
+			"name": "usuarios",
+			"item": [
+				{
+					"name": "Obtener usuario por ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZDEzNjE3ZWNmZDYwZDY0ODk4MzIiLCJpYXQiOjE3NDExNDg5MTUsImV4cCI6MTc0MTE1MjUxNX0.u7Vp5AJTzSXkDXhyUZr-p5pCNrzTfG4NxjyWgdgI0hE"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/user/findUser/67c7d13617ecfd60d6489832"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar usuarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/user"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar usuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZTVlMzBmMjhjZmU4N2YxNWQ4YTYiLCJpYXQiOjE3NDExNTM3NzYsImV4cCI6MTc0MTE1NzM3Nn0.ReHXXCJAEX2aySXyyVabO6MIkRloXgxlG5gLYnZRIG0"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"PHILIP_DKong\",\r\n  \"surname\": \"pilipitoxddddddddd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/ventasOnline/v1/user/updateUser"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar usuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZTVlMzBmMjhjZmU4N2YxNWQ4YTYiLCJpYXQiOjE3NDExNTM3NzYsImV4cCI6MTc0MTE1NzM3Nn0.ReHXXCJAEX2aySXyyVabO6MIkRloXgxlG5gLYnZRIG0"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/user/deleteUser"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "checkout",
+			"item": [
+				{
+					"name": "Crear checkout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNjA5NTgsImV4cCI6MTc0MTE2NDU1OH0.Icb5FWUUF6O6jzSgJumHPJJ9MC5Yxszrm6eY8HqYiLg"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/ventasOnline/v1/checkout"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "categorias",
+			"item": [
+				{
+					"name": "Crear categoria",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Electronics\",\r\n  \"description\": \"Todos los dispositivos electrónicos\",\r\n  \"createdBy\": \"67c7d13617ecfd60d6489832\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/ventasOnline/v1/category"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar categorias por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/category/67c7e9ae0a17f6971704e4fa"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar categorias",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/category"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar categoria por ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Electrodomesticos\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://127.0.0.1:3000/ventasOnline/v1/category/67c7e9ae0a17f6971704e4fa"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar categoria",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/category/67c7e9ae0a17f6971704e4fa"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "facturas",
+			"item": [
+				{
+					"name": "Crear factura",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNTgyOTUsImV4cCI6MTc0MTE2MTg5NX0.uToKDdRyCEp5MxYC9Bll_PDZ77ayTSauww4j0j3viOM"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"user\": \"67c7ec530a17f6971704e520\",\r\n  \"items\": [\r\n    {\r\n      \"product\": \"67c7e8b20a17f6971704e4f4\",\r\n      \"quantity\": 10,\r\n      \"price\": 899\r\n    }\r\n    \r\n  ],\r\n  \"total\": 8990\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/ventasOnline/v1/invoice/createInvoice"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar factura por ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNTgyOTUsImV4cCI6MTc0MTE2MTg5NX0.uToKDdRyCEp5MxYC9Bll_PDZ77ayTSauww4j0j3viOM"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/ventasOnline/v1/invoice/67c7f9dc94a9121f21124a47"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar facturas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/ventasOnline/v1/invoice?user=67c7ec530a17f6971704e520",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"ventasOnline",
+								"v1",
+								"invoice"
+							],
+							"query": [
+								{
+									"key": "user",
+									"value": "67c7ec530a17f6971704e520"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar categoria por ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"items\": [\r\n    {\r\n      \"product\": \"60f7f78d2e9a1234567890ab\",\r\n      \"quantity\": 3,\r\n      \"price\": 899\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://127.0.0.1:3000/ventasOnline/v1/invoice/{uid}"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar categoria",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/category/{uid}"
+					},
+					"response": []
+				},
+				{
+					"name": "Generar pdf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNTgyOTUsImV4cCI6MTc0MTE2MTg5NX0.uToKDdRyCEp5MxYC9Bll_PDZ77ayTSauww4j0j3viOM"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/ventasOnline/v1/invoice/67c7fc34585199c2d83c239e/pdf"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "carrito",
+			"item": [
+				{
+					"name": "Crear carrito",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNTU0MzIsImV4cCI6MTc0MTE1OTAzMn0.F_VfnZ3trI8agZT1q9aQUDVXTryv_Jkkmm_bETGCR90"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"product\": \"67c7e8b20a17f6971704e4f4\",\r\n  \"quantity\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/ventasOnline/v1/cart"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar carrito pendiente",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNTU0MzIsImV4cCI6MTc0MTE1OTAzMn0.F_VfnZ3trI8agZT1q9aQUDVXTryv_Jkkmm_bETGCR90"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantity\": 15\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://127.0.0.1:3000/ventasOnline/v1/cart"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar carrito",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNTU0MzIsImV4cCI6MTc0MTE1OTAzMn0.F_VfnZ3trI8agZT1q9aQUDVXTryv_Jkkmm_bETGCR90"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"product\": \"67c7f08794a9121f21124a1a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/ventasOnline/v1/cart"
+					},
+					"response": []
+				},
+				{
+					"name": "Vaciar carrito",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNTU0MzIsImV4cCI6MTc0MTE1OTAzMn0.F_VfnZ3trI8agZT1q9aQUDVXTryv_Jkkmm_bETGCR90"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/cart/clear"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar carrito por ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNTU0MzIsImV4cCI6MTc0MTE1OTAzMn0.F_VfnZ3trI8agZT1q9aQUDVXTryv_Jkkmm_bETGCR90"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/cart"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "productos",
+			"item": [
+				{
+					"name": "Crear producto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"iPhone 10000\",\r\n  \"description\": \"El último iPhone de Apple\",\r\n  \"price\": 999,\r\n  \"stock\": 50,\r\n  \"category\": \"65f9c3f5d5e8b42f12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/ventasOnline/v1/product"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar producto por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/product/67c7e8b20a17f6971704e4f4"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar productos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/product"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar por nombre",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/ventasOnline/v1/product?name=iPhone 13",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"ventasOnline",
+								"v1",
+								"product"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "iPhone 13"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar producto por ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"price\": 899,\r\n  \"stock\": 45\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://127.0.0.1:3000/ventasOnline/v1/product/67c7e8b20a17f6971704e4f4"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar productos",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/product/{uid}"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar por categoria",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/ventasOnline/v1/product?category=65f9c3f5d5e8b42f12345678",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"ventasOnline",
+								"v1",
+								"product"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "65f9c3f5d5e8b42f12345678"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar por out-of-stock",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Listar por best-selling",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar imagen de producto",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/product/{uid}/image"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"JOSE\",\r\n  \"surname\": \"Doe\",\r\n  \"username\": \"CONTRERAS_TERRY\",\r\n  \"email\": \"CONTRERASsssssss@example.com\",\r\n  \"password\": \"StrongCONTRERASP@ssw0rd!\",\r\n  \"phone\": \"12345678\",\r\n  \"role\": \"CLIENT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://127.0.0.1:3000/ventasOnline/v1/auth/register"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"CONTRERAS_TERRY\",\r\n  \"password\": \"StrongCONTRERASP@ssw0rd!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://127.0.0.1:3000/ventasOnline/v1/auth/login"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

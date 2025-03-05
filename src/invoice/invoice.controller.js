@@ -1,5 +1,6 @@
-import Invoice from "./invoice.model.js";
+import Invoice from "../invoice/invoice.model.js";
 import Product from "../product/product.model.js";
+import fs from "fs";
 import { generateInvoicePDF, validateInvoiceStock } from "../helpers/db-validators.js";
 
 /**
@@ -144,29 +145,41 @@ export const updateInvoice = async (req, res) => {
   }
 };
 
-/**
- * Genera y descarga el PDF de una factura.
- */
+
 export const downloadInvoicePDF = async (req, res) => {
   try {
     const { id } = req.params;
     const invoice = await Invoice.findById(id)
       .populate("user", "name email")
       .populate("items.product", "name price");
+
     if (!invoice) {
       return res.status(404).json({
         success: false,
         message: "Factura no encontrada"
       });
     }
+
+    // Llamar al helper para generar el PDF
     const pdfPath = await generateInvoicePDF(invoice);
-    return res.download(pdfPath, `factura_${invoice._id}.pdf`, (err) => {
+
+    // Configurar cabeceras para indicar descarga
+    res.setHeader("Content-Disposition", `attachment; filename=factura_${invoice._id}.pdf`);
+    res.setHeader("Content-Type", "application/pdf");
+
+    // Enviar el archivo PDF al cliente y luego eliminar el archivo temporal
+    res.download(pdfPath, `factura_${invoice._id}.pdf`, (err) => {
       if (err) {
-        console.error("Error enviando el PDF", err);
+        console.error("Error enviando el PDF:", err);
       }
-      // Opcional: eliminar el archivo temporal
+      fs.unlink(pdfPath, (unlinkErr) => {
+        if (unlinkErr) {
+          console.error("Error eliminando el archivo temporal:", unlinkErr);
+        }
+      });
     });
   } catch (err) {
+    console.error("Error al generar el PDF:", err);
     return res.status(500).json({
       success: false,
       message: "Error al generar el PDF",

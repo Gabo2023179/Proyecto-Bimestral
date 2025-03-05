@@ -11,34 +11,66 @@ import { registerValidator, loginValidator } from "../middlewares/user-validator
 const router = Router();
 
 /**
- * Ruta para registrar un nuevo usuario.
- *
  * @swagger
- * /register:
+ * tags:
+ *   name: Auth
+ *   description: Rutas de autenticación
+ */
+
+/**
+ * @swagger
+ * /ventasOnline/v1/auth/register:
  *   post:
  *     summary: Registra un nuevo usuario
  *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
  *             properties:
  *               name:
  *                 type: string
+ *                 description: Nombre del usuario
+ *                 example: Juan
+ *               username:
+ *                 type: string
+ *                 description: Nombre de usuario
+ *                 example: juan123
  *               email:
  *                 type: string
+ *                 description: Correo electrónico del usuario
+ *                 example: juan@example.com
  *               password:
  *                 type: string
- *               profilePicture:
+ *                 description: Contraseña del usuario
+ *                 example: SecurePass123!
+ *               role:
  *                 type: string
- *                 format: binary
+ *                 description: Rol del usuario (opcional)
+ *                 example: CLIENT
  *     responses:
- *       200:
+ *       201:
  *         description: Usuario registrado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User has been created
+ *                 name:
+ *                   type: string
+ *                   example: Juan
+ *                 email:
+ *                   type: string
+ *                   example: juan@example.com
  *       400:
  *         description: Error en la solicitud
+ *       500:
+ *         description: Error interno del servidor
  */
 router.post(
     "/register",  // Endpoint para el registro de usuario
@@ -47,10 +79,8 @@ router.post(
 );
 
 /**
- * Ruta para iniciar sesión de un usuario.
- *
  * @swagger
- * /login:
+ * /ventasOnline/v1/auth/login:
  *   post:
  *     summary: Inicia sesión de un usuario
  *     tags: [Auth]
@@ -63,13 +93,43 @@ router.post(
  *             properties:
  *               email:
  *                 type: string
+ *                 description: Correo electrónico del usuario
+ *                 example: juan@example.com
+ *               username:
+ *                 type: string
+ *                 description: Nombre de usuario
+ *                 example: juan123
  *               password:
  *                 type: string
+ *                 description: Contraseña del usuario
+ *                 example: SecurePass123!
  *     responses:
  *       200:
  *         description: Inicio de sesión exitoso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Login successful
+ *                 userDetails:
+ *                   type: object
+ *                   properties:
+ *                     token:
+ *                       type: string
+ *                       example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *                     name:
+ *                       type: string
+ *                       example: Juan
+ *                     email:
+ *                       type: string
+ *                       example: juan@example.com
  *       400:
- *         description: Error en la solicitud
+ *         description: Credenciales inválidas
+ *       500:
+ *         description: Error interno del servidor
  */
 router.post(
     "/login",  // Endpoint para el inicio de sesión

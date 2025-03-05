@@ -10,3 +10,15 @@ export const createCartItemValidator = [
   validarCampos,
   handleErrors
 ];
+
+export const editCartItemValidator = [
+  body("product")
+    .notEmpty().withMessage("El ID del producto es obligatorio")
+    .isMongoId().withMessage("Debe ser un ID de MongoDB válido")
+    .custom(productExists),
+  body("quantity")
+    .notEmpty().withMessage("La cantidad es obligatoria")
+    .isInt({ min: 1 }).withMessage("La cantidad debe ser al menos 1"),
+  validarCampos,
+  handleErrors
+];

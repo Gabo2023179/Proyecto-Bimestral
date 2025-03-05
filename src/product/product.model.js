@@ -6,7 +6,7 @@ const ProductSchema = new Schema(
       type: String,
       required: [true, "El nombre del producto es obligatorio"],
       trim: true,
-      unique: true, // Evita nombres duplicados
+      unique: true,
     },
     description: {
       type: String,
@@ -33,11 +33,16 @@ const ProductSchema = new Schema(
     },
     status: {
       type: Boolean,
-      default: true, // Indica si el producto está activo
+      default: true,
+    },
+    // Nuevo atributo para almacenar las fotos del producto
+    images: {
+      type: [String],
+      default: [],
     },
   },
   {
-    timestamps: true, // Añade createdAt y updatedAt
+    timestamps: true,
     versionKey: false,
   }
 );

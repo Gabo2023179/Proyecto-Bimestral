@@ -1,6 +1,6 @@
 import User from "../user/user.model.js"
 import Category from "../category/category.model.js"
-import Product from "../models/product.model.js";
+import Product from "../product/product.model.js";
 import PDFDocument from "pdfkit";
 import fs from "fs";
 import path from "path";
@@ -130,28 +130,78 @@ export const validateInvoiceStock = async (items) => {
 export const generateInvoicePDF = async (invoice) => {
   return new Promise((resolve, reject) => {
     try {
-      const doc = new PDFDocument();
+      // Crear documento PDF con margen
+      const doc = new PDFDocument({ margin: 50 });
       const filePath = path.join(process.cwd(), "temp", `invoice_${invoice._id}.pdf`);
       fs.mkdirSync(path.dirname(filePath), { recursive: true });
       const stream = fs.createWriteStream(filePath);
       doc.pipe(stream);
 
-      // Encabezado
-      doc.fontSize(20).text("Factura", { align: "center" });
-      doc.moveDown();
-      doc.fontSize(12).text(`ID: ${invoice._id}`);
-      doc.text(`Usuario: ${invoice.user}`);
-      doc.text(`Fecha: ${invoice.createdAt}`);
-      doc.moveDown();
+      // --- Encabezado ---
+      doc
+        .fontSize(26)
+        .fillColor("#333")
+        .text("Factura", { align: "center" })
+        .moveDown();
 
-      // Lista de productos
-      doc.text("Productos:");
+      // --- Información de la factura ---
+      doc
+        .fontSize(12)
+        .fillColor("#555")
+        .text(`Factura ID: ${invoice._id}`)
+        .text(`Fecha: ${invoice.createdAt ? new Date(invoice.createdAt).toLocaleString() : "N/A"}`)
+        .moveDown();
+
+      // --- Información del cliente ---
+      const clientName = invoice.user && invoice.user.name ? invoice.user.name : "N/A";
+      const clientEmail = invoice.user && invoice.user.email ? invoice.user.email : "N/A";
+      doc
+        .text(`Cliente: ${clientName}`)
+        .text(`Email: ${clientEmail}`)
+        .moveDown();
+
+      // --- Línea divisoria ---
+      doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke().moveDown(0.5);
+
+      // --- Encabezado de Productos ---
+      doc
+        .fontSize(14)
+        .fillColor("#000")
+        .text("Detalle de Productos", { underline: true, align: "left" })
+        .moveDown(0.5);
+
+      // --- Listado de productos ---
       invoice.items.forEach((item, index) => {
-        doc.text(`${index + 1}. Producto ID: ${item.product} | Cantidad: ${item.quantity} | Precio: ${item.price}`);
+        const productName = item.product && item.product.name ? item.product.name : "Producto no disponible";
+        const quantity = item.quantity || 0;
+        const unitPrice = item.price || 0;
+        const totalItem = quantity * unitPrice;
+        doc
+          .fontSize(12)
+          .fillColor("#333")
+          .text(`${index + 1}. ${productName}`, { continued: true })
+          .text(` | Cant: ${quantity}`, { continued: true })
+          .text(` | Precio: $${unitPrice}`, { continued: true })
+          .text(` | Total: $${totalItem}`)
+          .moveDown(0.3);
       });
-      doc.moveDown();
-      doc.text(`Total: ${invoice.total}`);
-      doc.text(`Estado: ${invoice.status}`);
+
+      // --- Línea divisoria antes del Total ---
+      doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke().moveDown(0.5);
+
+      // --- Total de la factura ---
+      doc
+        .fontSize(14)
+        .fillColor("#000")
+        .text(`Total: $${invoice.total}`, { align: "right" })
+        .moveDown();
+
+      // --- Pie de Página ---
+      doc
+        .fontSize(10)
+        .fillColor("#777")
+        .text("¡Gracias por su compra!", { align: "center" });
+
       doc.end();
 
       stream.on("finish", () => resolve(filePath));
@@ -161,4 +211,3 @@ export const generateInvoicePDF = async (invoice) => {
     }
   });
 };
-
