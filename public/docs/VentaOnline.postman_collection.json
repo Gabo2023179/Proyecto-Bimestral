@@ -1,14 +1,38 @@
 {
 	"info": {
-		"_postman_id": "a1458c24-ecd8-4426-849b-14210c033ef0",
+		"_postman_id": "f204bee6-5727-4408-bb6b-327c9ffad7ee",
 		"name": "VentaOnline",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
-		"_exporter_id": "37589039"
+		"_exporter_id": "37589075"
 	},
 	"item": [
 		{
 			"name": "usuarios",
 			"item": [
+				{
+					"name": "Crear usuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M4YjFkMjM1ZGJjOWE5ZWIzOGQ3OTYiLCJpYXQiOjE3NDEyMTQ5MDgsImV4cCI6MTc0MTIxODUwOH0.hOTBLGB0GpWlEoQEOLGA42ZqbpXS30Q7L2MyHy4qvA8"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"joseph\",\r\n  \"surname\": \"zzz joseph\",\r\n  \"username\": \"josepha\",\r\n  \"email\": \"joseph@example.com\",\r\n  \"password\": \"StrongT@ssw0rd!\",\r\n  \"phone\": \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/ventasOnline/v1/user"
+					},
+					"response": []
+				},
 				{
 					"name": "Obtener usuario por ID",
 					"request": {
@@ -26,9 +50,21 @@
 				},
 				{
 					"name": "Listar usuarios",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": "http://localhost:3000/ventasOnline/v1/user"
 					},
 					"response": []
@@ -39,7 +75,7 @@
 						"auth": {
 							"type": "bearer",
 							"bearer": {
-								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZTVlMzBmMjhjZmU4N2YxNWQ4YTYiLCJpYXQiOjE3NDExNTM3NzYsImV4cCI6MTc0MTE1NzM3Nn0.ReHXXCJAEX2aySXyyVabO6MIkRloXgxlG5gLYnZRIG0"
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M4Y2Y3ODZiM2VkZmE1ZGM0M2RhNGQiLCJpYXQiOjE3NDEyMTM2NTIsImV4cCI6MTc0MTIxNzI1Mn0.MiRzoxS0mabc_1zVWMwJmEq2jSpbMgEqu_rcYG0sgNI"
 							}
 						},
 						"method": "PUT",
@@ -58,6 +94,30 @@
 					"response": []
 				},
 				{
+					"name": "Actualizar usuario por ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M4YjFkMjM1ZGJjOWE5ZWIzOGQ3OTYiLCJpYXQiOjE3NDEyMTQ5MDgsImV4cCI6MTc0MTIxODUwOH0.hOTBLGB0GpWlEoQEOLGA42ZqbpXS30Q7L2MyHy4qvA8"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"AAAAAAAAAAAAA\",\r\n  \"surname\": \"piliASDADASDADASD\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/ventasOnline/v1/user/updateUser/67c8d4daa09a3497bd8392c8"
+					},
+					"response": []
+				},
+				{
 					"name": "Eliminar usuario",
 					"request": {
 						"auth": {
@@ -69,6 +129,21 @@
 						"method": "DELETE",
 						"header": [],
 						"url": "http://localhost:3000/ventasOnline/v1/user/deleteUser"
+					},
+					"response": []
+				},
+				{
+					"name": "Historial de usuarios",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M4YmM5MzIxYjZhYjA3MzA4MjUxYzIiLCJpYXQiOjE3NDEyMDg3NDksImV4cCI6MTc0MTIxMjM0OX0.M9Lz3hBt9dTdpq1fNnT40Z0UDP-7VhT0cHgS7ZVymGQ"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/user/purchase-history"
 					},
 					"response": []
 				}
@@ -83,7 +158,7 @@
 						"auth": {
 							"type": "bearer",
 							"bearer": {
-								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNjA5NTgsImV4cCI6MTc0MTE2NDU1OH0.Icb5FWUUF6O6jzSgJumHPJJ9MC5Yxszrm6eY8HqYiLg"
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M4YmM5MzIxYjZhYjA3MzA4MjUxYzIiLCJpYXQiOjE3NDEyMDg3NDksImV4cCI6MTc0MTIxMjM0OX0.M9Lz3hBt9dTdpq1fNnT40Z0UDP-7VhT0cHgS7ZVymGQ"
 							}
 						},
 						"method": "POST",
@@ -100,6 +175,33 @@
 						"url": "http://localhost:3000/ventasOnline/v1/checkout"
 					},
 					"response": []
+				},
+				{
+					"name": "Generar pdf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNTgyOTUsImV4cCI6MTc0MTE2MTg5NX0.uToKDdRyCEp5MxYC9Bll_PDZ77ayTSauww4j0j3viOM"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/ventasOnline/v1/invoice/67c8c1cf18fb9495b96a8d87/pdf"
+					},
+					"response": []
 				}
 			]
 		},
@@ -109,11 +211,17 @@
 				{
 					"name": "Crear categoria",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M4YjFkMjM1ZGJjOWE5ZWIzOGQ3OTYiLCJpYXQiOjE3NDEyMTQ5MDgsImV4cCI6MTc0MTIxODUwOH0.hOTBLGB0GpWlEoQEOLGA42ZqbpXS30Q7L2MyHy4qvA8"
+							}
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Electronics\",\r\n  \"description\": \"Todos los dispositivos electrónicos\",\r\n  \"createdBy\": \"67c7d13617ecfd60d6489832\"\r\n}",
+							"raw": "{\r\n  \"name\": \"Electronics\",\r\n  \"description\": \"Todos los dispositivos electrónicos\",\r\n  \"createdBy\": \"67c8ab48e7cc55515f561ce5\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -163,9 +271,15 @@
 				{
 					"name": "Eliminar categoria",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M4Y2Y3ODZiM2VkZmE1ZGM0M2RhNGQiLCJpYXQiOjE3NDEyMTM2NTIsImV4cCI6MTc0MTIxNzI1Mn0.MiRzoxS0mabc_1zVWMwJmEq2jSpbMgEqu_rcYG0sgNI"
+							}
+						},
 						"method": "DELETE",
 						"header": [],
-						"url": "http://localhost:3000/ventasOnline/v1/category/67c7e9ae0a17f6971704e4fa"
+						"url": "http://localhost:3000/ventasOnline/v1/category/"
 					},
 					"response": []
 				}
@@ -187,7 +301,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"user\": \"67c7ec530a17f6971704e520\",\r\n  \"items\": [\r\n    {\r\n      \"product\": \"67c7e8b20a17f6971704e4f4\",\r\n      \"quantity\": 10,\r\n      \"price\": 899\r\n    }\r\n    \r\n  ],\r\n  \"total\": 8990\r\n}",
+							"raw": "{\r\n  \"user\": \"67c8b2ea5ac17f614d64fb4b\",\r\n  \"items\": [\r\n    {\r\n      \"product\": \"67c8b31e5ac17f614d64fb53\",\r\n      \"quantity\": 1,\r\n      \"price\": 999\r\n    }\r\n    \r\n  ],\r\n  \"total\": 999\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -221,7 +335,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:3000/ventasOnline/v1/invoice/67c7f9dc94a9121f21124a47"
+						"url": "http://localhost:3000/ventasOnline/v1/invoice/67c8c1cf18fb9495b96a8d87"
 					},
 					"response": []
 				},
@@ -231,7 +345,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/ventasOnline/v1/invoice?user=67c7ec530a17f6971704e520",
+							"raw": "http://localhost:3000/ventasOnline/v1/invoice?user=67c8b2ea5ac17f614d64fb4b",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -245,7 +359,7 @@
 							"query": [
 								{
 									"key": "user",
-									"value": "67c7ec530a17f6971704e520"
+									"value": "67c8b2ea5ac17f614d64fb4b"
 								}
 							]
 						}
@@ -253,56 +367,20 @@
 					"response": []
 				},
 				{
-					"name": "Actualizar categoria por ID",
+					"name": "Actualizar factura",
 					"request": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"items\": [\r\n    {\r\n      \"product\": \"60f7f78d2e9a1234567890ab\",\r\n      \"quantity\": 3,\r\n      \"price\": 899\r\n    }\r\n  ]\r\n}",
+							"raw": "{\r\n  \"items\": [\r\n    {\r\n      \"product\": \"67c8b31e5ac17f614d64fb53\",\r\n      \"quantity\": 2,\r\n      \"price\": 999\r\n    }\r\n  ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://127.0.0.1:3000/ventasOnline/v1/invoice/{uid}"
-					},
-					"response": []
-				},
-				{
-					"name": "Eliminar categoria",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": "http://localhost:3000/ventasOnline/v1/category/{uid}"
-					},
-					"response": []
-				},
-				{
-					"name": "Generar pdf",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNTgyOTUsImV4cCI6MTc0MTE2MTg5NX0.uToKDdRyCEp5MxYC9Bll_PDZ77ayTSauww4j0j3viOM"
-							}
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": "http://localhost:3000/ventasOnline/v1/invoice/67c7fc34585199c2d83c239e/pdf"
+						"url": "http://127.0.0.1:3000/ventasOnline/v1/invoice/67c8c1cf18fb9495b96a8d87"
 					},
 					"response": []
 				}
@@ -317,14 +395,14 @@
 						"auth": {
 							"type": "bearer",
 							"bearer": {
-								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNTU0MzIsImV4cCI6MTc0MTE1OTAzMn0.F_VfnZ3trI8agZT1q9aQUDVXTryv_Jkkmm_bETGCR90"
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M4YmM5MzIxYjZhYjA3MzA4MjUxYzIiLCJpYXQiOjE3NDEyMDg3NDksImV4cCI6MTc0MTIxMjM0OX0.M9Lz3hBt9dTdpq1fNnT40Z0UDP-7VhT0cHgS7ZVymGQ"
 							}
 						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"product\": \"67c7e8b20a17f6971704e4f4\",\r\n  \"quantity\": 10\r\n}",
+							"raw": "{\r\n  \"product\": \"67c8bfa8a64e24b231a847ce\",\r\n  \"quantity\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -336,43 +414,19 @@
 					"response": []
 				},
 				{
-					"name": "Actualizar carrito pendiente",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNTU0MzIsImV4cCI6MTc0MTE1OTAzMn0.F_VfnZ3trI8agZT1q9aQUDVXTryv_Jkkmm_bETGCR90"
-							}
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"quantity\": 15\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": "http://127.0.0.1:3000/ventasOnline/v1/cart"
-					},
-					"response": []
-				},
-				{
 					"name": "Eliminar carrito",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": {
-								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNTU0MzIsImV4cCI6MTc0MTE1OTAzMn0.F_VfnZ3trI8agZT1q9aQUDVXTryv_Jkkmm_bETGCR90"
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M4YmM5MzIxYjZhYjA3MzA4MjUxYzIiLCJpYXQiOjE3NDEyMDg3NDksImV4cCI6MTc0MTIxMjM0OX0.M9Lz3hBt9dTdpq1fNnT40Z0UDP-7VhT0cHgS7ZVymGQ"
 							}
 						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"product\": \"67c7f08794a9121f21124a1a\"\r\n}",
+							"raw": "{\r\n  \"product\": \"67c8b31e5ac17f614d64fb53\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -389,7 +443,7 @@
 						"auth": {
 							"type": "bearer",
 							"bearer": {
-								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M3ZWM1MzBhMTdmNjk3MTcwNGU1MjAiLCJpYXQiOjE3NDExNTU0MzIsImV4cCI6MTc0MTE1OTAzMn0.F_VfnZ3trI8agZT1q9aQUDVXTryv_Jkkmm_bETGCR90"
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2N2M4YmM5MzIxYjZhYjA3MzA4MjUxYzIiLCJpYXQiOjE3NDEyMDg3NDksImV4cCI6MTc0MTIxMjM0OX0.M9Lz3hBt9dTdpq1fNnT40Z0UDP-7VhT0cHgS7ZVymGQ"
 							}
 						},
 						"method": "DELETE",
@@ -539,7 +593,8 @@
 					"name": "Listar por out-of-stock",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": "http://localhost:3000/ventasOnline/v1/product/out-of-stock"
 					},
 					"response": []
 				},
@@ -547,16 +602,8 @@
 					"name": "Listar por best-selling",
 					"request": {
 						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "Actualizar imagen de producto",
-					"request": {
-						"method": "PATCH",
 						"header": [],
-						"url": "http://localhost:3000/ventasOnline/v1/product/{uid}/image"
+						"url": "http://localhost:3000/ventasOnline/v1/product/best-selling"
 					},
 					"response": []
 				}
@@ -572,7 +619,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"JOSE\",\r\n  \"surname\": \"Doe\",\r\n  \"username\": \"CONTRERAS_TERRY\",\r\n  \"email\": \"CONTRERASsssssss@example.com\",\r\n  \"password\": \"StrongCONTRERASP@ssw0rd!\",\r\n  \"phone\": \"12345678\",\r\n  \"role\": \"CLIENT\"\r\n}",
+							"raw": "{\r\n  \"name\": \"Sanchezso\",\r\n  \"surname\": \"zzz Sanchez\",\r\n  \"username\": \"Sanchezs\",\r\n  \"email\": \"Sanchezs@example.com\",\r\n  \"password\": \"StrongTERRYP@ssw0rd!\",\r\n  \"phone\": \"12345678\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -590,7 +637,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"username\": \"CONTRERAS_TERRY\",\r\n  \"password\": \"StrongCONTRERASP@ssw0rd!\"\r\n}",
+							"raw": "{\r\n  \"username\": \"admin123\",\r\n  \"password\": \"SecureP@ssword123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

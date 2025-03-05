@@ -1,0 +1,50 @@
+[{
+  "_id": {
+    "$oid": "67c8c1c718fb9495b96a8d80"
+  },
+  "user": {
+    "$oid": "67c8b2ea5ac17f614d64fb4b"
+  },
+  "items": [
+    {
+      "product": {
+        "$oid": "67c8b31e5ac17f614d64fb53"
+      },
+      "quantity": 1,
+      "price": 999
+    }
+  ],
+  "total": 999,
+  "status": "Pendiente",
+  "createdAt": {
+    "$date": "2025-03-05T21:27:35.347Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-05T21:27:35.347Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67c8c1cf18fb9495b96a8d87"
+  },
+  "user": {
+    "$oid": "67c8bc9321b6ab07308251c2"
+  },
+  "items": [
+    {
+      "product": {
+        "$oid": "67c8b31e5ac17f614d64fb53"
+      },
+      "quantity": 2,
+      "price": 999
+    }
+  ],
+  "total": 1998,
+  "status": "Pendiente",
+  "createdAt": {
+    "$date": "2025-03-05T21:27:43.472Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-05T21:29:39.813Z"
+  }
+}]

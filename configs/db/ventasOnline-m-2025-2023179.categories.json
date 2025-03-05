@@ -1,0 +1,17 @@
+[{
+  "_id": {
+    "$oid": "67c8d0376b3edfa5dc43da57"
+  },
+  "name": "Electronics",
+  "description": "Todos los dispositivos electrónicos",
+  "createdBy": {
+    "$oid": "67c8ab48e7cc55515f561ce5"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2025-03-05T22:29:11.651Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-05T22:29:11.651Z"
+  }
+}]

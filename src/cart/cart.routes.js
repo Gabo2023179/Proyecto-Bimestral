@@ -1,25 +1,28 @@
 import { Router } from "express";
-import { getCategories, getCategoryById, createCategory, updateCategory, deleteCategory } from "../category/category.controller.js";
-import { createCategoryValidator, updateCategoryValidator, deleteCategoryValidator, getCategoryByIdValidator } from "../middlewares/category-validators.js";
+import { getCart, addToCart, editCartItem, removeFromCart, clearCart } from "../cart/cart.controller.js";
+import { createCartItemValidator, editCartItemValidator } from "../middlewares/cart-validators.js";
+import { validateJWT } from "../middlewares/validate-jwt.js";
 
 const router = Router();
 
 /**
  * @swagger
  * tags:
- *   name: Category
- *   description: Rutas de gestión de categorías
+ *   name: Cart
+ *   description: Rutas para la gestión del carrito de compras
  */
 
 /**
  * @swagger
- * /ventasOnline/v1/category:
+ * /cart:
  *   get:
- *     summary: Obtiene todas las categorías
- *     tags: [Category]
+ *     summary: Obtener el carrito del usuario autenticado
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Lista de categorías
+ *         description: Carrito del usuario autenticado
  *         content:
  *           application/json:
  *             schema:
@@ -28,80 +31,56 @@ const router = Router();
  *                 success:
  *                   type: boolean
  *                   example: true
- *                 categories:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       name:
- *                         type: string
- *                         example: Electrónica
- *                       description:
- *                         type: string
- *                         example: Productos electrónicos y gadgets
- *                       createdBy:
- *                         type: string
- *                         example: 60d0fe4f5311236168a109ca
- *                       status:
- *                         type: boolean
- *                         example: true
- *       500:
- *         description: Error interno del servidor
- */
-router.get("/", getCategories);
-
-/**
- * @swagger
- * /ventasOnline/v1/category/{id}:
- *   get:
- *     summary: Obtiene una categoría por ID
- *     tags: [Category]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *           description: ID de la categoría
- *     responses:
- *       200:
- *         description: Categoría encontrada
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 category:
+ *                 cart:
  *                   type: object
  *                   properties:
- *                     name:
- *                       type: string
- *                       example: Electrónica
- *                     description:
- *                       type: string
- *                       example: Productos electrónicos y gadgets
- *                     createdBy:
+ *                     user:
  *                       type: string
  *                       example: 60d0fe4f5311236168a109ca
- *                     status:
- *                       type: boolean
- *                       example: true
- *       404:
- *         description: Categoría no encontrada
+ *                     items:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           product:
+ *                             type: object
+ *                             properties:
+ *                               name:
+ *                                 type: string
+ *                                 example: Producto 1
+ *                               price:
+ *                                 type: number
+ *                                 example: 100
+ *                           quantity:
+ *                             type: number
+ *                             example: 2
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al obtener el carrito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Error al obtener el carrito
+ *                 error:
+ *                   type: string
+ *                   example: Error message
  */
-router.get("/:id", getCategoryByIdValidator, getCategoryById);
+router.get("/", validateJWT, getCart);
 
 /**
  * @swagger
- * /ventasOnline/v1/category:
+ * /cart:
  *   post:
- *     summary: Crea una nueva categoría
- *     tags: [Category]
+ *     summary: Agregar (crear) o sumar cantidad en el carrito
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -109,78 +88,172 @@ router.get("/:id", getCategoryByIdValidator, getCategoryById);
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               product:
  *                 type: string
- *                 example: Electrónica
- *               description:
+ *                 description: ID del producto
+ *                 example: 60d0fe4f5311236168a109ca
+ *               quantity:
+ *                 type: integer
+ *                 description: Cantidad del producto
+ *                 example: 2
+ *     responses:
+ *       200:
+ *         description: Producto agregado/actualizado en el carrito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Producto agregado/actualizado en el carrito
+ *                 cart:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       type: string
+ *                       example: 60d0fe4f5311236168a109ca
+ *                     items:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           product:
+ *                             type: string
+ *                             example: 60d0fe4f5311236168a109ca
+ *                           quantity:
+ *                             type: number
+ *                             example: 2
+ *       500:
+ *         description: Error al agregar/actualizar el carrito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Error al agregar/actualizar el carrito
+ *                 error:
+ *                   type: string
+ *                   example: Error message
+ */
+router.post("/", validateJWT, createCartItemValidator, addToCart);
+
+/**
+ * @swagger
+ * /cart:
+ *   put:
+ *     summary: Editar (actualizar) la cantidad de un producto en el carrito
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               product:
  *                 type: string
- *                 example: Productos electrónicos y gadgets
- *               createdBy:
+ *                 description: ID del producto
+ *                 example: 60d0fe4f5311236168a109ca
+ *               quantity:
+ *                 type: integer
+ *                 description: Cantidad del producto
+ *                 example: 3
+ *     responses:
+ *       200:
+ *         description: Carrito actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Carrito actualizado exitosamente
+ *                 cart:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       type: string
+ *                       example: 60d0fe4f5311236168a109ca
+ *                     items:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           product:
+ *                             type: string
+ *                             example: 60d0fe4f5311236168a109ca
+ *                           quantity:
+ *                             type: number
+ *                             example: 3
+ *       404:
+ *         description: Carrito no encontrado o producto no se encuentra en el carrito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Carrito no encontrado
+ *       500:
+ *         description: Error al actualizar el carrito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Error al actualizar el carrito
+ *                 error:
+ *                   type: string
+ *                   example: Error message
+ */
+router.put("/", validateJWT, editCartItemValidator, editCartItem);
+
+/**
+ * @swagger
+ * /cart:
+ *   delete:
+ *     summary: Remover un producto del carrito
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               product:
  *                 type: string
+ *                 description: ID del producto
  *                 example: 60d0fe4f5311236168a109ca
  *     responses:
- *       201:
- *         description: Categoría creada exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Categoría creada exitosamente
- *                 category:
- *                   type: object
- *                   properties:
- *                     name:
- *                       type: string
- *                       example: Electrónica
- *                     description:
- *                       type: string
- *                       example: Productos electrónicos y gadgets
- *                     createdBy:
- *                       type: string
- *                       example: 60d0fe4f5311236168a109ca
- *                     status:
- *                       type: boolean
- *                       example: true
- *       500:
- *         description: Error interno del servidor
- */
-router.post("/", createCategoryValidator, createCategory);
-
-/**
- * @swagger
- * /ventasOnline/v1/category/{id}:
- *   put:
- *     summary: Actualiza una categoría existente
- *     tags: [Category]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *           description: ID de la categoría
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: Electrónica
- *               description:
- *                 type: string
- *                 example: Productos electrónicos y gadgets
- *     responses:
  *       200:
- *         description: Categoría actualizada exitosamente
+ *         description: Producto removido del carrito
  *         content:
  *           application/json:
  *             schema:
@@ -191,45 +264,67 @@ router.post("/", createCategoryValidator, createCategory);
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Categoría actualizada exitosamente
- *                 category:
+ *                   example: Producto removido del carrito
+ *                 cart:
  *                   type: object
  *                   properties:
- *                     name:
- *                       type: string
- *                       example: Electrónica
- *                     description:
- *                       type: string
- *                       example: Productos electrónicos y gadgets
- *                     createdBy:
+ *                     user:
  *                       type: string
  *                       example: 60d0fe4f5311236168a109ca
- *                     status:
- *                       type: boolean
- *                       example: true
+ *                     items:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           product:
+ *                             type: string
+ *                             example: 60d0fe4f5311236168a109ca
+ *                           quantity:
+ *                             type: number
+ *                             example: 2
  *       404:
- *         description: Categoría no encontrada
+ *         description: Carrito no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Carrito no encontrado
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al remover del carrito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Error al remover del carrito
+ *                 error:
+ *                   type: string
+ *                   example: Error message
  */
-router.put("/:id", updateCategoryValidator, updateCategory);
+router.delete("/", validateJWT, removeFromCart);
 
 /**
  * @swagger
- * /ventasOnline/v1/category/{id}:
+ * /cart/clear:
  *   delete:
- *     summary: Elimina una categoría
- *     tags: [Category]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *           description: ID de la categoría
+ *     summary: Vaciar el carrito completo
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Categoría eliminada exitosamente
+ *         description: Carrito vaciado
  *         content:
  *           application/json:
  *             schema:
@@ -240,12 +335,54 @@ router.put("/:id", updateCategoryValidator, updateCategory);
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Categoría eliminada y productos reasignados
+ *                   example: Carrito vaciado
+ *                 cart:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       type: string
+ *                       example: 60d0fe4f5311236168a109ca
+ *                     items:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           product:
+ *                             type: string
+ *                             example: 60d0fe4f5311236168a109ca
+ *                           quantity:
+ *                             type: number
+ *                             example: 2
  *       404:
- *         description: Categoría no encontrada
+ *         description: Carrito no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Carrito no encontrado
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al vaciar el carrito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Error al vaciar el carrito
+ *                 error:
+ *                   type: string
+ *                   example: Error message
  */
-router.delete("/:id", deleteCategoryValidator, deleteCategory);
+router.delete("/clear", validateJWT, clearCart);
 
 export default router;

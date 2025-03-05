@@ -15,13 +15,11 @@ export const checkout = async (req, res) => {
       });
     }
     
-    // Opcional: Validar stock para cada item
     await validateInvoiceStock(cart.items);
     
     let total = 0;
     const invoiceItems = [];
     
-    // Procesar cada item del carrito para obtener el precio actual y actualizar stock y ventas
     for (const item of cart.items) {
       const product = await Product.findById(item.product);
       
@@ -32,15 +30,13 @@ export const checkout = async (req, res) => {
         });
       }
       
-      const price = product.price; // Precio actual del producto
+      const price = product.price;
       total += price * item.quantity;
       
-      // Actualizar el stock y las ventas del producto
       product.stock -= item.quantity;
       product.sold = (product.sold || 0) + item.quantity;
       await product.save();
       
-      // Construir el objeto del ítem de factura con el campo "price"
       invoiceItems.push({
         product: item.product,
         quantity: item.quantity,
@@ -48,7 +44,6 @@ export const checkout = async (req, res) => {
       });
     }
     
-    // Crear la factura con los items transformados y el total calculado
     const invoice = new Invoice({
       user: userId,
       items: invoiceItems,
@@ -57,7 +52,6 @@ export const checkout = async (req, res) => {
     
     await invoice.save();
     
-    // Vaciar el carrito
     cart.items = [];
     await cart.save();
     

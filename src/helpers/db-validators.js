@@ -211,3 +211,17 @@ export const generateInvoicePDF = async (invoice) => {
     }
   });
 };
+
+export const getDefaultCategoryId = async () => {
+  const defaultCategory = await Category.findOne({ name: "default" });
+  if (!defaultCategory) {
+    throw new Error("La categoría por defecto no existe");
+  }
+  return defaultCategory._id;
+};
+
+export const filterUserUpdateData = (data) => {
+  const { _id, password, createdAt, updatedAt, __v, ...rest } = data;
+  return rest;
+};
+

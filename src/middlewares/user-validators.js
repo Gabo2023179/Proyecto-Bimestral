@@ -24,7 +24,7 @@ export const registerValidator = [
         minNumbers: 1,
         minSymbols: 1
     }),  
-    body("role").optional().isIn(["ADMIN", "CLIENT"]).withMessage("Rol no válido, debe ser 'ADMIN' o 'CLIENT'"), /* Aqui hacemos que role sea opcional para que por default un usuario sea CLIENT,
+    body("role").optional().isIn(["CLIENT"]).withMessage("Solo se permite rol CLIENTE"), /* Aqui hacemos que role sea opcional para que por default un usuario sea CLIENT,
      verificamos si los roles son ADMIN O CLIENT .isIN y tiramos mesaje.
     */
     validarCampos,
@@ -114,3 +114,24 @@ export const createDefaultAdmin = async (req, res) => {
       });
     }
   };
+
+  export const createUserValidator = [
+    body("name").notEmpty().withMessage("El nombre es requerido"),
+    body("username").notEmpty().withMessage("El username es requerido"),
+    body("email").notEmpty().withMessage("El email es requerido"),
+    body("email").isEmail().withMessage("No es un email válido"),
+    body("email").custom(emailExists),
+    body("username").custom(usernameExists),
+    body("password").isStrongPassword({
+        minLength: 8,
+        minLowercase:1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1
+    }),  
+    body("role").optional().isIn(["ADMIN", "CLIENT"]).withMessage("Rol no válido, debe ser 'ADMIN' o 'CLIENT'"), /* Aqui hacemos que role sea opcional para que por default un usuario sea CLIENT,
+     verificamos si los roles son ADMIN O CLIENT .isIN y tiramos mesaje.
+    */
+    validarCampos,
+    handleErrors
+]

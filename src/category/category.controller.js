@@ -1,10 +1,6 @@
 import Category from "../category/category.model.js";
-import { reassignProductsToDefault } from "../helpers/db-validators.js";
+import { reassignProductsToDefault, getDefaultCategoryId  } from "../helpers/db-validators.js";
 
-// ID de la categoría predeterminada a la cual se reasignan los productos
-const DEFAULT_CATEGORY_ID = "65f9c3f5d5e8b42f12345678";
-
-// Test
 
 export const getCategories = async (req, res) => {
   try {
@@ -91,6 +87,7 @@ export const updateCategory = async (req, res) => {
   }
 };
 
+
 export const deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
@@ -102,10 +99,13 @@ export const deleteCategory = async (req, res) => {
       });
     }
 
-    // Reasigna los productos asociados a esta categoría a la categoría predeterminada
-    await reassignProductsToDefault(id, DEFAULT_CATEGORY_ID);
+    
+    const defaultCategoryId = await getDefaultCategoryId();
 
-    // Elimina la categoría
+    
+    await reassignProductsToDefault(id, defaultCategoryId);
+
+    
     await Category.findByIdAndDelete(id);
 
     return res.status(200).json({

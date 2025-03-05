@@ -55,9 +55,23 @@ const router = Router();
  *                         example: 200
  *                       status:
  *                         type: string
- *                         example: Pendiente
+ *                         example: Pagada
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al obtener las facturas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Error al obtener las facturas
+ *                 error:
+ *                   type: string
+ *                   example: Error message
  */
 router.get("/", getInvoices);
 
@@ -110,17 +124,42 @@ router.get("/", getInvoices);
  *                       example: 200
  *                     status:
  *                       type: string
- *                       example: Pendiente
+ *                       example: Pagada
  *       404:
  *         description: Factura no encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Factura no encontrada
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al obtener la factura
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Error al obtener la factura
+ *                 error:
+ *                   type: string
+ *                   example: Error message
  */
 router.get("/:id", getInvoiceByIdValidator, getInvoiceById);
 
 /**
  * @swagger
- * /ventasOnline/v1/invoice/createInvoice:
+ * /ventasOnline/v1/invoice:
  *   post:
  *     summary: Crea una nueva factura
  *     tags: [Invoice]
@@ -133,6 +172,7 @@ router.get("/:id", getInvoiceByIdValidator, getInvoiceById);
  *             properties:
  *               user:
  *                 type: string
+ *                 description: ID del usuario
  *                 example: 60d0fe4f5311236168a109ca
  *               items:
  *                 type: array
@@ -141,15 +181,19 @@ router.get("/:id", getInvoiceByIdValidator, getInvoiceById);
  *                   properties:
  *                     product:
  *                       type: string
+ *                       description: ID del producto
  *                       example: 60d0fe4f5311236168a109ca
  *                     quantity:
  *                       type: number
+ *                       description: Cantidad del producto
  *                       example: 2
  *                     price:
  *                       type: number
+ *                       description: Precio del producto
  *                       example: 100
  *               total:
  *                 type: number
+ *                 description: Total de la factura
  *                 example: 200
  *     responses:
  *       201:
@@ -190,17 +234,31 @@ router.get("/:id", getInvoiceByIdValidator, getInvoiceById);
  *                       example: 200
  *                     status:
  *                       type: string
- *                       example: Pendiente
+ *                       example: Pagada
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al crear la factura
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Error al crear la factura
+ *                 error:
+ *                   type: string
+ *                   example: Error message
  */
-router.post("/createInvoice", createInvoiceValidator, createInvoice);
+router.post("/", createInvoiceValidator, createInvoice);
 
 /**
  * @swagger
  * /ventasOnline/v1/invoice/{id}:
  *   put:
- *     summary: Actualiza una factura existente
+ *     summary: Actualiza una factura por ID
  *     tags: [Invoice]
  *     parameters:
  *       - in: path
@@ -223,15 +281,19 @@ router.post("/createInvoice", createInvoiceValidator, createInvoice);
  *                   properties:
  *                     product:
  *                       type: string
+ *                       description: ID del producto
  *                       example: 60d0fe4f5311236168a109ca
  *                     quantity:
  *                       type: number
+ *                       description: Cantidad del producto
  *                       example: 2
  *                     price:
  *                       type: number
+ *                       description: Precio del producto
  *                       example: 100
  *               total:
  *                 type: number
+ *                 description: Total de la factura
  *                 example: 200
  *     responses:
  *       200:
@@ -272,19 +334,44 @@ router.post("/createInvoice", createInvoiceValidator, createInvoice);
  *                       example: 200
  *                     status:
  *                       type: string
- *                       example: Pendiente
+ *                       example: Pagada
  *       404:
- *         description: Factura no encontrada
+ *         description: Factura no encontrada para actualizar
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Factura no encontrada para actualizar
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al actualizar la factura
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Error al actualizar la factura
+ *                 error:
+ *                   type: string
+ *                   example: Error message
  */
 router.put("/:id", updateInvoiceValidator, updateInvoice);
 
 /**
  * @swagger
- * /ventasOnline/v1/invoice/{id}/pdf:
+ * /ventasOnline/v1/invoice/{id}/download:
  *   get:
- *     summary: Descarga el PDF de una factura
+ *     summary: Descarga una factura en formato PDF
  *     tags: [Invoice]
  *     parameters:
  *       - in: path
@@ -295,7 +382,7 @@ router.put("/:id", updateInvoiceValidator, updateInvoice);
  *           description: ID de la factura
  *     responses:
  *       200:
- *         description: PDF de la factura
+ *         description: PDF de la factura descargado exitosamente
  *         content:
  *           application/pdf:
  *             schema:
@@ -303,9 +390,34 @@ router.put("/:id", updateInvoiceValidator, updateInvoice);
  *               format: binary
  *       404:
  *         description: Factura no encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Factura no encontrada
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al generar el PDF
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Error al generar el PDF
+ *                 error:
+ *                   type: string
+ *                   example: Error message
  */
-router.get("/:id/pdf", getInvoiceByIdValidator, downloadInvoicePDF);
+router.get("/:id/download", getInvoiceByIdValidator, downloadInvoicePDF);
 
 export default router;

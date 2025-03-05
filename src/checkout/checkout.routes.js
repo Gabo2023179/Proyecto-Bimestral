@@ -59,10 +59,46 @@ const router = Router();
  *                       example: 200
  *       400:
  *         description: El carrito está vacío
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: El carrito está vacío
  *       404:
  *         description: Producto no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Producto con ID {id} no encontrado
  *       500:
  *         description: Error en el proceso de compra
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Error en el proceso de compra
+ *                 error:
+ *                   type: string
+ *                   example: Error message
  */
 router.post("/", validateJWT, checkoutValidator, checkout);
 

@@ -2,12 +2,6 @@ import { Router } from "express";
 import { register, login } from "./auth.controller.js";
 import { registerValidator, loginValidator } from "../middlewares/user-validators.js";
 
-/**
- * Crea un nuevo enrutador de Express.
- * 
- * Este enrutador permite definir rutas para el registro e inicio de sesión de usuarios,
- * manteniendo la modularidad y organización del código.
- */
 const router = Router();
 
 /**
@@ -45,14 +39,10 @@ const router = Router();
  *               password:
  *                 type: string
  *                 description: Contraseña del usuario
- *                 example: SecurePass123!
- *               role:
- *                 type: string
- *                 description: Rol del usuario (opcional)
- *                 example: CLIENT
+ *                 example: SecureP@ssword123
  *     responses:
  *       201:
- *         description: Usuario registrado exitosamente
+ *         description: Usuario creado exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -67,22 +57,27 @@ const router = Router();
  *                 email:
  *                   type: string
  *                   example: juan@example.com
- *       400:
- *         description: Error en la solicitud
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al registrar el usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User registration failed
+ *                 error:
+ *                   type: string
+ *                   example: Error message
  */
-router.post(
-    "/register",  // Endpoint para el registro de usuario
-    registerValidator, // Middleware de validación de datos
-    register // Controlador que maneja el registro
-);
+router.post("/register", registerValidator, register);
 
 /**
  * @swagger
  * /ventasOnline/v1/auth/login:
  *   post:
- *     summary: Inicia sesión de un usuario
+ *     summary: Inicia sesión un usuario
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -102,7 +97,7 @@ router.post(
  *               password:
  *                 type: string
  *                 description: Contraseña del usuario
- *                 example: SecurePass123!
+ *                 example: SecureP@ssword123
  *     responses:
  *       200:
  *         description: Inicio de sesión exitoso
@@ -119,7 +114,7 @@ router.post(
  *                   properties:
  *                     token:
  *                       type: string
- *                       example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *                       example: jwt_token
  *                     name:
  *                       type: string
  *                       example: Juan
@@ -128,13 +123,31 @@ router.post(
  *                       example: juan@example.com
  *       400:
  *         description: Credenciales inválidas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Crendenciales inválidas
+ *                 error:
+ *                   type: string
+ *                   example: No existe el usuario o correo ingresado
  *       500:
- *         description: Error interno del servidor
+ *         description: Error en el servidor al iniciar sesión
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Login failed, server error
+ *                 error:
+ *                   type: string
+ *                   example: Error message
  */
-router.post(
-    "/login",  // Endpoint para el inicio de sesión
-    loginValidator, // Middleware de validación de datos de inicio de sesión
-    login // Controlador que maneja la autenticación
-);
+router.post("/login", loginValidator, login);
 
-export default router; // Exportamos el enrutador para su uso en la aplicación principal
+export default router;

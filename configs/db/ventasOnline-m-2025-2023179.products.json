@@ -1,0 +1,42 @@
+[{
+  "_id": {
+    "$oid": "67c8b31e5ac17f614d64fb53"
+  },
+  "name": "iPhone 16 PRO MAX",
+  "description": "El último iPhone de Apple",
+  "price": 999,
+  "stock": 15,
+  "sold": 35,
+  "category": {
+    "$oid": "67c8af3de7cc55515f561cf1"
+  },
+  "status": true,
+  "images": [],
+  "createdAt": {
+    "$date": "2025-03-05T20:25:02.548Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-05T21:29:39.811Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67c8bfa8a64e24b231a847ce"
+  },
+  "name": "iPhone 16",
+  "description": "El último iPhone de Apple",
+  "price": 999,
+  "stock": 49,
+  "sold": 1,
+  "category": {
+    "$oid": "67c8af3de7cc55515f561cf1"
+  },
+  "status": true,
+  "images": [],
+  "createdAt": {
+    "$date": "2025-03-05T21:18:32.699Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-05T21:29:39.808Z"
+  }
+}]

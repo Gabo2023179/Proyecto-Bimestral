@@ -78,15 +78,12 @@ export const createInvoice = async (req, res) => {
   }
 };
 
-/**
- * Actualiza una factura existente.  
- * Se revierte el stock de los items anteriores, se valida el stock para los nuevos items y se actualizan los productos.
- */
+
 export const updateInvoice = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Buscar la factura existente
+    
     const existingInvoice = await Invoice.findById(id);
     if (!existingInvoice) {
       return res.status(404).json({
@@ -95,9 +92,9 @@ export const updateInvoice = async (req, res) => {
       });
     }
 
-    // Si se actualizan los items, se debe ajustar el stock de los productos
+    
     if (req.body.items) {
-      // Revertir el stock de los items anteriores
+      
       for (const oldItem of existingInvoice.items) {
         const product = await Product.findById(oldItem.product);
         if (product) {
